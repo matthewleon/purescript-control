@@ -1,6 +1,6 @@
 module Control.Lazy where
 
-import Data.Unit (Unit, unit)
+import Prelude
 
 -- | The `Lazy` class represents types which allow evaluation of values
 -- | to be _deferred_.
@@ -12,6 +12,9 @@ class Lazy l where
 
 instance lazyFn :: Lazy (a -> b) where
   defer f = \x -> f unit x
+
+deferMonad :: forall m a. Monad m => (Unit -> m a) -> m a
+deferMonad f = pure unit >>= (defer \_ -> f)
 
 -- | `fix` defines a value as the fixed point of a function.
 -- |
